@@ -10,7 +10,7 @@ char rotors [5][26] = {
     {'V', 'Z', 'B', 'R', 'G', 'I', 'T', 'Y', 'U', 'P', 'S', 'D', 'N', 'H', 'L', 'X', 'A', 'W', 'M', 'J', 'Q', 'O', 'F', 'E', 'C', 'K'}
     };
 
-int ringPosition = 20;
+int ringPosition = 24;
 int ringPositionForDecryption = 20;
 
 /// @brief uses the given letter and finds it's index before returning the character representing the mapping
@@ -19,22 +19,24 @@ int ringPositionForDecryption = 20;
 char rotorEntrySubstitution(char entryLetter, int rotorNumber) {
 
 for (int j=0; j<26; j++){
-    printf("%c", rotors[rotorNumber][26 - j]);
+    // printf("%c", rotors[rotorNumber][26 - j]);
     char currentLetter = rotors[rotorNumber][j];
     char currentAlphabet = alphabets[j];
     char selectedLetter = entryLetter;
     char index = j;
+    char newValue;
         if (alphabets[j] == entryLetter) {
-            // int newIndex = i + ringPosition;
-            // ringPosition +=1;
-            // if (newIndex > 25) {
-            //     newIndex = newIndex - 25;
-            //     return newIndex;
-            // }
-            // return newIndex;
-            char newValue = rotors[rotorNumber][j];
+             int newIndex = j + ringPosition;
+             ringPosition +=1;
+             if (newIndex > 25) {
+                 newIndex = newIndex - 25;
+                 ringPosition = 0;
+                 newValue = rotors[rotorNumber][newIndex];
+                 return newValue;
+             }
+            newValue = rotors[rotorNumber][newIndex];
             int x = 0;
-            return rotors[rotorNumber][j];
+            return newValue;
         }
     }
 }
@@ -42,10 +44,11 @@ for (int j=0; j<26; j++){
 int main() {
    for (int i = 0; i<15; i++) {
     char encrypt = 0;
-    printf("Enter a value");
+    printf("\nEnter a value\n");
+
     scanf("%c", &encrypt);
-    char newChar = rotorEntrySubstitution(encrypt, 1);
-    printf("%c", newChar);
+    char newChar = rotorEntrySubstitution(encrypt, 2);
+    printf("\n%c\n", newChar);
    }
     return 0;
 }
