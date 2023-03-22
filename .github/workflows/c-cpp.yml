@@ -16,4 +16,4 @@ jobs:
     - name: setup
       run: sudo apt install cmake
     - name: cmake
-      run: cmake --build . --target enigma -j 3
+      run: cmake --build build --target enigma -j 3
