@@ -3,6 +3,6 @@
 
 int ringPosition; // Ring setting.
 int startingPosition; //
-
+char rotorEntrySubstitution(char entryLetter, int rotorNumber);
 
 #endif

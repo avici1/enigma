@@ -1,5 +1,5 @@
 #include <stdio.h>
-
+#include "rotor.h"
 int startPosition = 0;
 char alphabets[26] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 char rotors [5][26] = {
@@ -11,20 +11,18 @@ char rotors [5][26] = {
     };
 
 int ringPosition = 24;
-int ringPositionForDecryption = 20;
-
 /// @brief uses the given letter and finds it's index before returning the character representing the mapping
 /// @param entryLetter: char
 /// @return New integer value representing the position of the encrypted character.
 char rotorEntrySubstitution(char entryLetter, int rotorNumber) {
 
 for (int j=0; j<26; j++){
-    // printf("%c", rotors[rotorNumber][26 - j]);
     char currentLetter = rotors[rotorNumber][j];
     char currentAlphabet = alphabets[j];
     char selectedLetter = entryLetter;
     char index = j;
     char newValue;
+    printf("Calling the function rotorEntry");
         if (alphabets[j] == entryLetter) {
              int newIndex = j + ringPosition;
              ringPosition +=1;
@@ -32,23 +30,24 @@ for (int j=0; j<26; j++){
                  newIndex = newIndex - 25;
                  ringPosition = 0;
                  newValue = rotors[rotorNumber][newIndex];
+                 printf("\n%c", newValue);
                  return newValue;
              }
             newValue = rotors[rotorNumber][newIndex];
-            int x = 0;
-            return newValue;
+//            if(newIndex == notchPosition) {
+//                return 0;
+//            }
+            printf("\n%c", newValue);
+            return "B";
         }
     }
 }
 
-int main() {
-   for (int i = 0; i<15; i++) {
-    char encrypt = 0;
-    printf("\nEnter a value\n");
-
-    scanf("%c", &encrypt);
-    char newChar = rotorEntrySubstitution(encrypt, 2);
-    printf("\n%c\n", newChar);
-   }
+int main () {
+    char letter = 'Z';
+    printf("Provide a letter\n");
+    scanf("%c", &letter);
+    char newValue = rotorEntrySubstitution(letter, 2);
+    printf("Decrypted value is %c %c", letter, newValue);
     return 0;
 }
