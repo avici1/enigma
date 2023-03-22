@@ -10,6 +10,6 @@ int main () {
     printf("Provide a letter\n");
     scanf("%c", &letter);
     char newValue = rotorEntrySubstitution(letter, 2);
-    printf("Decrypted value is %c %c", letter, newValue);
+    printf("Decrypted value is %c\n", newValue);
     return 0;
 }
