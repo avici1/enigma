@@ -10,11 +10,13 @@ char rotors [5][26] = {
         {'V', 'Z', 'B', 'R', 'G', 'I', 'T', 'Y', 'U', 'P', 'S', 'D', 'N', 'H', 'L', 'X', 'A', 'W', 'M', 'J', 'Q', 'O', 'F', 'E', 'C', 'K'}
 };
 
-int ringPosition = 24;
+int ringPosition = 25;
 /// @brief uses the given letter and finds it's index before returning the character representing the mapping
 /// @param entryLetter: char
-/// @return New integer value representing the position of the encrypted character.
-char rotorEntrySubstitution(char entryLetter, int rotorNumber) {
+/// @param rotorNumber: int
+/// @param notchPosition: int
+/// @return rotorResponse include the status 0 or 1
+struct rotorResponse rotorEntrySubstitution(char entryLetter, int rotorNumber, int notchPosition) {
 
     for (int j=0; j<26; j++){
         char currentLetter = rotors[rotorNumber][j];
@@ -22,21 +24,28 @@ char rotorEntrySubstitution(char entryLetter, int rotorNumber) {
         char selectedLetter = entryLetter;
         char index = j;
         char newValue;
+        struct rotorResponse returnValue;
         if (alphabets[j] == entryLetter) {
             int newIndex = j + ringPosition;
             ringPosition +=1;
-            if (newIndex > 25) {
+            if (newIndex >= 25) {
                 newIndex = newIndex - 25;
                 ringPosition = 0;
                 newValue = rotors[rotorNumber][newIndex];
                 printf("\n%c", newValue);
-                return newValue;
+                returnValue.letter = newValue;
+                returnValue.status = 1;
+                return returnValue;
             }
             newValue = rotors[rotorNumber][newIndex];
-//            if(newIndex == notchPosition) {
-//                return 0;
-//            }
-            return newValue;
+            if(newIndex == notchPosition) {
+                returnValue.letter = newValue;
+                returnValue.status = 1;
+                return returnValue;
+            }
+            returnValue.letter = newValue;
+            returnValue.status = 0;
+            return returnValue;
         }
     }
 }
