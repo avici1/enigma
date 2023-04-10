@@ -5,6 +5,13 @@
 #include <stdbool.h>
 
 typedef struct rotorResponse { bool status; char letter };
-struct rotorResponse rotorEntrySubstitution(char entryLetter, int rotorNumber, int notchPosition);
+struct rotorResponse rotorEntrySubstitution(
+        char entryLetter,
+        int rotorNumber,
+        int notchPosition,
+        bool shouldRotate,
+        int ringPosition,
+        bool isItForward
+        );
 
 #endif
