@@ -2,53 +2,159 @@
 // Created by avici1 on 21/03/2023.
 //
 #include <stdio.h>
-#include "rotor.h"
 #include "plugboard.h"
 #include "reflector.h"
+#include "rotors.h"
+
+char forwardPath(char valueFromPlugBoard);
+
+char backwardPath(char reflectedLetter);
+
+bool IS_ROTOR_1_STARTING = true;
+
+bool IS_ROTOR_2_STARTING = true;
+
+bool IS_ROTOR_3_STARTING = true;
+
+int currentPositionRotor1 = 0;
+
+int currentPositionRotor2 = 0;
+
+int currentPositionRotor3 = 0;
 
 int main () {
     char letter = 'Z';
     char values[7];
     printf("Provide a letter\n");
     scanf("%c", &letter);
-    char valueFromPlugBoard = plugboard(letter);
+    char valueFromPlugBoard = plugboard(letter, true);
     /*
      * Path: Forward*/
 
-    //Rotor 1
-    struct rotorResponse response1 = rotorEntrySubstitution(valueFromPlugBoard, 2, 0, 1, 25, true);
-    printf("\n%d %c\n", response1.status, response1.letter);
-
-    //Rotor 2
-    struct rotorResponse response2 = rotorEntrySubstitution(response1.letter, 3, 1, response1.status, 25, true);
-    printf("\n%c", response2.letter);
-
-    //Rotor 3
-    struct rotorResponse response3 = rotorEntrySubstitution(response2.letter, 1, 1, response2.status, 25, true);
-    printf("\n%c", response3.letter);
-
-    // Reflector
-    char reflectedLetter = reflected(response3.letter, 0);
-    printf("\n%c", reflectedLetter);
+    char reflectedLetter = forwardPath(valueFromPlugBoard);
 
     /*
      * Path: Backwards */
 
-    // Rotor 3
-    struct rotorResponse response3_back = rotorEntrySubstitution(reflectedLetter, 1, 1, 0, 25, false);
-    printf("\n%c", response3_back.letter);
+    char valueFromPlugBoard_back = backwardPath(reflectedLetter);
 
-    // Rotor 2
-    struct rotorResponse response2_back = rotorEntrySubstitution(response3_back.letter, 3, 1, 0, 25, false);
-    printf("\n%c", response2_back.letter);
+    printf("\n value from rotor 3 %c", valueFromPlugBoard);
 
-    // Rotor 3
-    struct rotorResponse response1_back = rotorEntrySubstitution(response2_back.letter, 2, 0, 0, 25,false);
-    printf("\n%c", response1_back.letter);
+    printf("\n Final value %c", valueFromPlugBoard_back);
 
-    // Plugboard.
-    printf("==================== %c ===================", reflectedLetter);
-    char valueFromPlugBoard_back = plugboard(response1_back.letter);
-    printf("\nDecrypted value is %c\n", valueFromPlugBoard_back);
     return 0;
 }
+
+char forwardPath(char valueFromPlugBoard) {
+    struct response* response1;
+    struct response* response2;
+    struct response* response3;
+    //Rotor 1
+    response1 = rotor(
+            valueFromPlugBoard,
+            1,
+            IS_ROTOR_1_STARTING,
+            4,
+            0,
+            0,
+            1,
+            true
+            );
+    printf("%c ==== 1 ", response1->outputChar);
+    IS_ROTOR_1_STARTING = false;
+    currentPositionRotor1 = response1->newPosition;
+
+    //Rotor 2
+
+    response2 = rotor(
+            response1->outputChar,
+            response1->shouldRotate,
+            IS_ROTOR_2_STARTING,
+            21,
+            10,
+            0,
+            2,
+            true
+            );
+
+    IS_ROTOR_2_STARTING = false;
+    currentPositionRotor2 = response2->newPosition;
+    printf("\n%c ==== 2", response2->outputChar);
+
+    //Rotor 3
+    response3 = rotor(
+            response2->outputChar,
+            response2->shouldRotate,
+            IS_ROTOR_3_STARTING,
+            9,
+            12,
+            0,
+            3,
+            true
+    );
+    IS_ROTOR_3_STARTING = false;
+    currentPositionRotor3 = response3->newPosition;
+    printf("\n%c === 3", response3->outputChar);
+
+    // Reflector
+    char reflectedLetter = reflected(response3->outputChar, 0);
+    printf("\n%c reflected", reflectedLetter);
+    return reflectedLetter;
+}
+
+char backwardPath(char reflectedLetter) {
+
+//    // Rotor 3
+    struct response* response3;
+    struct response* response2;
+    struct response* response1;
+    response3 = rotor(
+            reflectedLetter,
+            false,
+            IS_ROTOR_3_STARTING,
+            9,
+            12,
+            0,
+            3,
+            false
+    );
+    IS_ROTOR_3_STARTING = false;
+    currentPositionRotor3 = response3->newPosition;
+    printf("\n%c === 3", response3->outputChar);
+
+    // Rotor 2
+    response2 = rotor(
+            response3->outputChar,
+            false,
+            IS_ROTOR_2_STARTING,
+            21,
+            10,
+            0,
+            2,
+            false
+    );
+    IS_ROTOR_2_STARTING = false;
+    currentPositionRotor2 = response2->newPosition;
+    printf("\n%c === 2", response2->outputChar);
+
+    response1 = rotor(
+            response2->outputChar,
+            false,
+            IS_ROTOR_2_STARTING,
+            4,
+            0,
+            0,
+            1,
+            false
+    );
+    IS_ROTOR_1_STARTING = false;
+    currentPositionRotor1 = response1->newPosition;
+    printf("\n%c === 1", response1->outputChar);
+
+    // Plugboard.
+    char valueFromPlugBoard_back = plugboard(response1->outputChar, false);
+//    printf("\nDecrypted value is %c\n", valueFromPlugBoard_back);
+    return valueFromPlugBoard_back;
+}
+
+

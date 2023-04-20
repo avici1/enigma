@@ -10,7 +10,7 @@ struct rotorResponse rotorEntrySubstitution(
         int rotorNumber,
         int notchPosition,
         bool shouldRotate,
-        int ringPosition,
+        int startPosition,
         bool isItForward
         );
 

@@ -28,9 +28,12 @@ char reflectorAlphabets [26] = { 'A', 'B', 'C', 'D', 'E', 'F',
 };
 
 char reflected(char letter, int reflector) {
+    char reflectedLetter = '\0';
     for (int i = 0; i < 25; ++i) {
         if (reflectorAlphabets[i] == letter) {
-          return reflectors[reflector][i];
+          reflectedLetter = reflectors[reflector][i];
+            break;
         }
     }
+    return reflectedLetter;
 }

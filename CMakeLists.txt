@@ -3,4 +3,4 @@ project(enigma C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(enigma main.c rotor.h rotor.c plugboard.c plugboard.h reflector.c reflector.h)
+add_executable(enigma main.c rotor.h rotor.c plugboard.c plugboard.h reflector.c reflector.h rotors.c rotors.h)
