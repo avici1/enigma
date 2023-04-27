@@ -17,4 +17,4 @@ char plugboard(char letter, bool isItFoward) {
         }
     }
     return returnValue;
-}Z
+}

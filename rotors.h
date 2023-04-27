@@ -19,4 +19,15 @@ struct response* rotor(
         bool isForward
         );
 
+struct response* rotor_forward(
+        char inputChar,
+        bool shouldRotate,
+        bool IS_ROTOR_STARTING,
+        int turnover,
+        int startPosition,
+        int currentPosition,
+        int rotorNumber,
+        bool isForward
+);
+
 #endif //ENIGMA_ROTORS_H
